@@ -39,6 +39,13 @@ jobs:
           outputs: type=docker,dest=/tmp/image.tar
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/harness-delegate:${{ github.ref_name }}
 
+      # Install Trivy
+      - name: Install Trivy
+        run: |
+          curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh
+          sudo mv trivy /usr/local/bin/
+
+
       # Scan image with Trivy
       - name: Scan tarball with Trivy
         run: trivy image --input /tmp/image.tar --format table --exit-code 1 --ignore-unfixed
