@@ -29,26 +29,19 @@ jobs:
           VERSION=${GITHUB_REF#refs/tags/}
           echo "VERSION=${VERSION}" >> $GITHUB_ENV
 
-      # Build image with both tags (latest + version)
-      - name: Build Docker image
+      # Build image as tarball
+      - name: Build Docker image (tarball)
         uses: docker/build-push-action@v5
         with:
           context: .
           file: ./Dockerfile
           push: false
-          load: true
-          tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/harness-delegate:latest
-            ${{ secrets.DOCKERHUB_USERNAME }}/harness-delegate:${{ env.VERSION }}
+          outputs: type=docker,dest=/tmp/image.tar
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/harness-delegate:${{ github.ref_name }}
 
       # Scan image with Trivy
-      - name: Scan Docker image with Trivy
-        uses: aquasecurity/trivy-action@0.20.0
-        with:
-          image-ref: ${{ secrets.DOCKERHUB_USERNAME }}/harness-delegate:${{ env.VERSION }}
-          format: 'table'
-          exit-code: '1'
-          ignore-unfixed: true
+      - name: Scan tarball with Trivy
+        run: trivy image --input /tmp/image.tar --format table --exit-code 1 --ignore-unfixed
 
       # Push image if scan passes
       - name: Push Docker image
@@ -59,4 +52,4 @@ jobs:
           push: true
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/harness-delegate:latest
-            ${{ secrets.DOCKERHUB_USERNAME }}/harness-delegate:${{ env.VERSION }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/harness-delegate:${{ github.ref_name }}
