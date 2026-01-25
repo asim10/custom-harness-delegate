@@ -36,6 +36,7 @@ jobs:
           context: .
           file: ./Dockerfile
           push: false
+          load: true
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/harness-delegate:latest
             ${{ secrets.DOCKERHUB_USERNAME }}/harness-delegate:${{ env.VERSION }}
