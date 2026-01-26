@@ -37,7 +37,7 @@ jobs:
           file: ./Dockerfile
           push: false
           outputs: type=docker,dest=/tmp/image.tar
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/harness-delegate:${{ github.ref_name }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/custom-harness-delegate:${{ github.ref_name }}
 
       # Install Trivy
       - name: Install Trivy
@@ -58,5 +58,5 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/harness-delegate:latest
-            ${{ secrets.DOCKERHUB_USERNAME }}/harness-delegate:${{ github.ref_name }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/custom-harness-delegate:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/custom-harness-delegate:${{ github.ref_name }}

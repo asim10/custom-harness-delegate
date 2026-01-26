@@ -3,7 +3,7 @@ FROM us-docker.pkg.dev/gar-prod-setup/harness-public/harness/delegate:26.01.8820
 USER root
 
 RUN microdnf update -y && \
-    microdnf install --nodocs unzip yum-utils python3.9 python3-pip wget jq sshpass openldap-clients -y && \
+    microdnf install --nodocs unzip yum-utils python3.9 python3-pip wget jq sshpass openldap-clients gcc python3-devel openldap-devel cyrus-sasl-devel -y && \
     yum-config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo && \
     microdnf install -y terraform && \
     mkdir -p /opt/harness-delegate/tools && \
@@ -14,7 +14,7 @@ RUN microdnf update -y && \
     rm -rf awscliv2.zip aws && \
     python3.9 -m pip install --upgrade pip && \
     python3.9 -m pip install \
-        jmespath lxml cryptography ansible pywinrm hvac beautifulsoup4 \
+        jmespath lxml cryptography ansible pywinrm hvac beautifulsoup4 python-ldap\
         google-auth google-api-python-client && \
     microdnf clean all && rm -rf /var/cache/dnf /var/cache/yum
 
