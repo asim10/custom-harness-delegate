@@ -48,7 +48,13 @@ jobs:
 
       # Scan image with Trivy
       - name: Scan tarball with Trivy
-        run: trivy image --input /tmp/image.tar --format table --exit-code 0 --ignore-unfixed
+        run: trivy image --input /tmp/image.tar --format sarif --output trivy-results.sarif
+
+      # Upload the report so it's accessible
+      - name: Upload Trivy scan results
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: 'trivy-results.sarif'
 
       # Push image if scan passes
       - name: Push Docker image
