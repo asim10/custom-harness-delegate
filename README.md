@@ -9,5 +9,5 @@
 Custom harness delegate image repo
 
 ```
-image version 2.0.0
+image version 2.1.0
 ```
