@@ -14,7 +14,7 @@ RUN microdnf update -y && \
     rm -rf awscliv2.zip aws && \
     python3.9 -m pip install --upgrade pip && \
     python3.9 -m pip install \
-        jmespath lxml cryptography ansible pywinrm hvac beautifulsoup4 python-ldap\
+        jmespath lxml cryptography ansible pywinrm hvac beautifulsoup4 python-ldap elasticsearch==8.* \
         google-auth google-api-python-client && \
     microdnf clean all && rm -rf /var/cache/dnf /var/cache/yum
 
