@@ -5,6 +5,7 @@
 [![Docker Pulls](https://img.shields.io/docker/pulls/asimd10/custom-harness-delegate)](https://hub.docker.com/r/asimd10/custom-harness-delegate/)
 ![Docker Image Size](https://img.shields.io/docker/image-size/asimd10/custom-harness-delegate/latest)
 ![Docker Stars](https://img.shields.io/docker/stars/asimd10/custom-harness-delegate)
+[![Security Scan Report](https://img.shields.io/badge/Security-Trivy_Scan_Report-blue)](https://github.com/asim10/custom-harness-delegate/security/code-scanning?query=is%3Aopen+branch%3Amain+tool%3ATrivy)
 
 # Custom Harness Delegate with Cloud Tooling
 
