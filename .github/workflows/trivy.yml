@@ -41,6 +41,7 @@ jobs:
           template: '@/contrib/sarif.tpl'
           output: 'trivy-results.sarif'
           severity: 'CRITICAL,HIGH'
+          security-checks: 'vuln'
           timeout: '30m0s'  # Increased timeout to 30 minutes
 
       - name: Upload Trivy scan results to GitHub Security tab
