@@ -12,7 +12,7 @@ on:
     # The branches below must be a subset of the branches above
     branches: [ "main" ]
   schedule:
-    - cron: '20 19 * * 3'
+    - cron: '0 0 * * *'
 
 permissions:
   contents: read
@@ -29,22 +29,29 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Build an image from Dockerfile
-        run: |
-          docker build -t docker.io/my-organization/my-app:${{ github.sha }} .
-
-      - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@7b7aa264d83dc58691451798b4d117d53d21edfe
+      # Build image as tarball
+      - name: Build Docker image (tarball)
+        uses: docker/build-push-action@v5
         with:
-          image-ref: 'docker.io/my-organization/my-app:${{ github.sha }}'
-          format: 'template'
-          template: '@/contrib/sarif.tpl'
-          output: 'trivy-results.sarif'
-          severity: 'CRITICAL,HIGH'
-          security-checks: 'vuln'
-          timeout: '30m0s'  # Increased timeout to 30 minutes
+          context: .
+          file: ./Dockerfile
+          push: false
+          outputs: type=docker,dest=/tmp/image.tar
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/custom-harness-delegate:${{ github.ref_name }}
 
-      - name: Upload Trivy scan results to GitHub Security tab
-        uses: github/codeql-action/upload-sarif@v3
+      # Install Trivy
+      - name: Install Trivy
+        run: |
+          curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh
+          sudo cp ./bin/trivy /usr/local/bin/
+
+
+      # Scan image with Trivy
+      - name: Scan tarball with Trivy
+        run: trivy image --input /tmp/image.tar --format sarif --output trivy-results.sarif
+
+      # Upload the report so it's accessible
+      - name: Upload Trivy scan results
+        uses: github/codeql-action/upload-sarif@v4
         with:
           sarif_file: 'trivy-results.sarif'
