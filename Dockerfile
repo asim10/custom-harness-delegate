@@ -1,4 +1,4 @@
-FROM us-docker.pkg.dev/gar-prod-setup/harness-public/harness/delegate:26.10.90200
+FROM us-docker.pkg.dev/gar-prod-setup/harness-public/harness/delegate:26.10.90200 as builder
 
 USER root
 
