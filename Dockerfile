@@ -22,7 +22,7 @@ RUN python3.9 -m pip install --upgrade pip && \
         google-api-python-client==2.107.0
 
 # Final stage - minimal runtime
-FROM artifed.transunion.com/tuharnessutils/harness/delegate:26.07.89703
+FROM us-docker.pkg.dev/gar-prod-setup/harness-public/harness/delegate:26.10.90200
 
 USER root
 
@@ -32,7 +32,7 @@ RUN microdnf update -y && \
     microdnf clean all && rm -rf /var/cache/dnf /var/cache/yum /tmp/* /var/tmp/*
 
 # Install yq
-RUN curl -o /usr/bin/yq "https://artifed.transunion.com:443/artifactory/odev-storage-local/workfusion/rpm-packages/yq" && \
+RUN curl -o /usr/bin/yq "https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64" && \
     chmod +x /usr/bin/yq
 
 # Install Terraform
